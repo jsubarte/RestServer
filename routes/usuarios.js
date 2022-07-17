@@ -1,8 +1,12 @@
 import { Router } from 'express'
-import { usuariosDelete, usuariosGet, usuariosPatch, usuariosPost, usuariosPut } from '../controllers/usuarios.js'
 import { check } from 'express-validator'
-import { validarCampos } from '../middlewares/validar_campos.js'
+import { usuariosDelete, usuariosGet, usuariosPatch, usuariosPost, usuariosPut } from '../controllers/usuarios.js'
 import { esRoleValido, emailExiste, existeUsuarioPorId } from '../helpers/db_validators.js'
+import {
+    validaCampos,
+    validaJWT,
+    validaRoles
+} from '../middlewares/index.js'
 
 export const router = Router()
 
@@ -15,20 +19,23 @@ router.post('/',[
     check('email').custom(emailExiste),
     //check('role', 'No es un rol permitido').isIn(['ADMIN_ROLE','USER_ROLE']),
     check('role').custom(esRoleValido),
-    validarCampos
+    validaCampos.validarCampos
 ], usuariosPost )
 
 router.put('/:id', [
     check('id','No es un ID válido').isMongoId(),
     check('id').custom( existeUsuarioPorId ),
     check('role').custom(esRoleValido),
-    validarCampos
+    validaCampos.validarCampos
 ], usuariosPut )
 
-router.patch('/', usuariosPatch )
-
 router.delete('/:id', [
+    validaJWT.validarJWT,
+    //validaRoles.esAdminRole,
+    validaRoles.tieneRole('ADMIN_ROLE','VENTAS_ROLE'),
     check('id','No es un ID válido').isMongoId(),
     check('id').custom( existeUsuarioPorId ),
-    validarCampos
+    validaCampos.validarCampos
 ], usuariosDelete )
+
+router.patch('/', usuariosPatch )
