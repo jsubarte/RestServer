@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { check } from 'express-validator'
-import { login } from '../controllers/auth.js'
+import { googleSingIn, login } from '../controllers/auth.js'
 import { validarCampos } from '../middlewares/validar_campos.js'
 
 export const auth = Router()
@@ -10,3 +10,8 @@ auth.post('/login', [
     check('password','La contraseña es obligatoria').notEmpty(),
     validarCampos
 ], login)
+
+auth.post('/google', [
+    check('id_token', 'Token de google es necesario').notEmpty(),
+    validarCampos
+], googleSingIn)
