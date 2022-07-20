@@ -1,5 +1,5 @@
 import { json, request, response } from "express"
-import { Usuario } from '../models/usuario.js'
+import { Usuario } from '../models/index.js'
 import pkg from 'bcryptjs'
 import { generarJWT } from "../helpers/generar_jwt.js"
 import { googleVerify } from "../helpers/google-verify.js"

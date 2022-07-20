@@ -1,7 +1,7 @@
 import { response, request } from 'express'
 import pkg from 'bcryptjs'
 
-import { Usuario } from '../models/usuario.js'
+import { Usuario } from '../models/index.js'
 
 const bcryptjs = pkg
 
@@ -52,12 +52,6 @@ const usuariosPut = async (req, res = response) => {
     res.json(usuario)
 }
 
-const usuariosPatch = async (req, res = response) => {
-    res.json({
-        msg: 'patch API - Controlador'
-    })
-}
-
 const usuariosDelete = async (req = request, res = response) => {
     const { id } = req.params
     const usuario = await Usuario.findByIdAndUpdate(id, { state: false })
@@ -69,6 +63,5 @@ export {
     usuariosGet,
     usuariosPost,
     usuariosPut,
-    usuariosPatch,
     usuariosDelete
 }
