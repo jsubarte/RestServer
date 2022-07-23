@@ -27,10 +27,17 @@ const existeProducto = async (id) => {
     if( !existeProduct ) throw new Error(`No existe ningun producto con el id ${ id }, en la BD`)
 }
 
+const coleccionesPermitidas = ( coleccion = '', colecciones = [] ) => {
+    const incluidas = colecciones.includes( coleccion )
+    if ( !incluidas ) throw new Error(`La coleccion ${ coleccion } no es permitida.`)
+    return true
+}
+
 export {
     esRoleValido,
     emailExiste,
     existeUsuarioPorId,
     existeCategoria,
-    existeProducto
+    existeProducto,
+    coleccionesPermitidas
 }

@@ -6,9 +6,13 @@ import { dbConnection } from '../database/config.js'
 import { categorias } from '../routes/categorias.js'
 import { productos } from '../routes/productos.js'
 import { rtrBuscar } from '../routes/buscar.js'
+import { uploads } from '../routes/uploads.js'
+import fileUpload from 'express-fileupload'
+
 
 class Server{
     
+
     constructor(){
         this.app = express()
         this.port = process.env.PORT
@@ -17,6 +21,7 @@ class Server{
             buscar: '/api/buscar',
             categories: '/api/categorias',
             productos: '/api/productos',
+            uploads: '/api/uploads',
             usuarios: '/api/usuarios'
         }
 
@@ -43,6 +48,13 @@ class Server{
 
         // Directorio Publico
         this.app.use( express.static('public') )
+
+        //File Upload
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/',
+            createParentPath: true
+        }));
     }
 
     routes(){
@@ -50,6 +62,7 @@ class Server{
         this.app.use(this.paths.buscar, rtrBuscar)
         this.app.use(this.paths.categories, categorias) 
         this.app.use(this.paths.productos, productos)
+        this.app.use(this.paths.uploads, uploads)
         this.app.use(this.paths.usuarios, router)
     }
 
